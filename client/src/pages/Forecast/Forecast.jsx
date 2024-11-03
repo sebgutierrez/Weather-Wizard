@@ -11,9 +11,11 @@ import Map from '../../components/Map/Map';
 import SectionContainer from '../../components/SectionContainer/SectionContainer';
 
 function Forecast() {
+  // Used to annotate charts and forecast sections
   const [modelInfo, setModelInfo] = useState({
-    location: '',
-    model: ''
+    region: "",
+    model: "",
+    predictions: {}
   });
 
   const [helpBoxToggle, setHelpBoxToggle] = useState(false);
@@ -48,14 +50,14 @@ function Forecast() {
             <div className="w-full lg:w-4/5 border-r-2 border-l-2 md:border-0 md:mx-auto row-span-2 col-span-0 md:row-span-1 md:col-span-2 overflow-clip relative">
               <Map></Map>
             </div>
-            <ForecastForm modelInfo={modelInfo} setModelInfo={setModelInfo}></ForecastForm>      
+            <ForecastForm modelInfo={modelInfo} setModelInfo={setModelInfo}></ForecastForm>   
           </div>
         </div>
         {
-          modelInfo.location !== '' && modelInfo.model !== '' ? 
-                                                              (<SectionContainer openWeatherData={openWeatherData} modelData={modelData} modelInfo={modelInfo} setModelInfo={setModelInfo}></SectionContainer>)
-                                                              :
-                                                              (null)
+          modelInfo.region !== '' && modelInfo.model !== '' ? 
+                                                            (<SectionContainer openWeatherData={openWeatherData} modelData={modelData} modelInfo={modelInfo} setModelInfo={setModelInfo}></SectionContainer>)
+                                                            :
+                                                            (null)
         }
     </div>
   );

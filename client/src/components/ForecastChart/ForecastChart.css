@@ -11,17 +11,17 @@
 } */
 
 .apexcharts-svg {
-    overflow: visible;
+  overflow: visible;
 }
 
 .apexcharts-tooltip {
-	color: black;
-	transform: translate(-10px, -40px);
-	z-index: 500;
+  color: black;
+  transform: translate(-10px, -40px);
+  z-index: 500;
 }
 
 .apexcharts-tooltip:hover {
-	opacity: 0.5 !important;
+  opacity: 0.5 !important;
 }
 
 /* .apex-charts-legend {
@@ -32,6 +32,7 @@
 
 } */
 
-.apexcharts-legend.apx-legend-position-bottom.apexcharts-align-center, .apexcharts-legend.apx-legend-position-top.apexcharts-align-center {
-    justify-content: flex-start !important;
+.apexcharts-legend.apx-legend-position-bottom.apexcharts-align-center,
+.apexcharts-legend.apx-legend-position-top.apexcharts-align-center {
+  justify-content: flex-start !important;
 }
