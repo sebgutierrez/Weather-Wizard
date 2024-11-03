@@ -4,37 +4,24 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from dotenv import load_dotenv
-
-load_dotenv()
-API_KEY = os.getenv("API_KEY")
-
-COUNTRY_CODES = {
-	"mongolia": "MN"
-}
-
-CITIES = {
-	"mongolia": "ulaanbaatar"
-}
-
 def rate_limit_warning(rate_limit_remaining: int):
 	if rate_limit_remaining < 10:
 		logger.warning(f"There are {rate_limit_remaining} API calls remaining!")
 
-def get_location_keys(model_collection: dict):
+def get_location_keys(models: dict, country_codes: dict, cities: dict):
 	"""
-		Calls the call_locations_api() function while collecting each region's location keys
+		Calls the call_locations_api() function while collecting each region's location keys.
 
-		Returns a dictionary location_keys with each region's location keys
+		Returns a dictionary location_keys with each region's location keys.
 	"""
 
 	location_keys = dict()
 
-	for region_model_tuple in model_collection.get_keys():
+	for region_model_tuple in models.keys():
 
 		region_name = region_model_tuple[0]
 
-		response = call_locations_api(region_name)
+		response = call_locations_api(region_name, country_codes, cities)
 
 		if response.status_code == requests.codes.ok:
 
@@ -50,17 +37,20 @@ def get_location_keys(model_collection: dict):
 
 	return location_keys
 
-def call_locations_api(region_name: str):
+def call_locations_api(region_name: str, country_codes: dict, cities: dict):
 	"""
-		Calls the Locations API (reduced by City Search)
+		Calls the Locations API - City Search (results narrowed by countryCode).
 
-		Returns a response from the API
+		List of all the response parameters: https://developer.accuweather.com/accuweather-locations-api/apis/get/locations/v1/cities/%7BcountryCode%7D/search
+		Returns a response from the API.
 	"""
 
-	country_code = COUNTRY_CODES.get(region_name)
-	city_name = CITIES.get(region_name)
+	country_code = country_codes.get(region_name)
+	city_name = cities.get(region_name)
+
 	# q: query
-	payload = {"apikey": API_KEY, "q": city_name}
+	payload = {"apikey": os.environ.get("API_KEY", default="BAD_API_KEY"), "q": city_name}
+
 	# Recommended by AccuWeather to allow GZIP compression
 	headers = {"Accept-Encoding": "gzip"}
 	url = f"http://dataservice.accuweather.com/locations/v1/cities/{country_code}/search"
@@ -68,21 +58,20 @@ def call_locations_api(region_name: str):
 	response = requests.get(url, params=payload, headers=headers, timeout=0.5)
 	return response
 
-def get_current_conditions(model_collection: dict, location_keys: dict):
+def get_current_conditions(models: dict, location_keys: dict):
 	"""
 		Calls the call_conditions_api() function while collecting each region's temperature, pressure, dewpoint temperature along with their date time for the last 24 hours.
 
 		Returns a dictionary conditions with each region's weather data for the last 24 hours
 	"""
 
-	conditions = {}
-	for region_model_tuple in model_collection.get_keys():
+	conditions = dict()
+	for region_model_tuple in models.keys():
 
 		region_name = region_model_tuple[0]
-		model_name = region_model_tuple[1]
 		location_key = location_keys.get(region_name)
 
-		response = call_conditions_api(region_name, location_key)
+		response = call_conditions_api(location_key)
 
 		if response.status_code == requests.codes.ok:
 
@@ -106,18 +95,20 @@ def get_current_conditions(model_collection: dict, location_keys: dict):
 				}
 
 		else:
-			logger.warning(f"Failed to retrieve historical data for - {region_name}! Using cached historical data for {model_name} as backup.")
+			logger.warning(f"Failed to retrieve historical data for - {region_name}!")
 
 	return conditions
 
-def call_conditions_api(region_name: str, location_key: str):
+def call_conditions_api(location_key: str):
 	"""
-		Calls the Current Conditions API - Historical Current Conditions (past 24 hours) - to get the temperature, pressure, and dewpoint temperatures for the last 24 hours
+		Calls the Current Conditions API - Historical Current Conditions (past 24 hours) - to get the temperature, pressure, and dewpoint temperatures for the last 24 hours.
 		
+		List of all the response parameters: https://developer.accuweather.com/accuweather-current-conditions-api/apis/get/currentconditions/v1/%7BlocationKey%7D/historical/24
 		Returns a response from the API
 	"""
 
-	payload = {"apikey": API_KEY, "details": True}
+	payload = {"apikey": os.environ.get("API_KEY", default="BAD_API_KEY"), "details": True}
+
 	# Recommended by AccuWeather to allow GZIP compression
 	headers = {"Accept-Encoding": "gzip"}
 	url = f"http://dataservice.accuweather.com/currentconditions/v1/{location_key}/historical/24"
@@ -125,15 +116,25 @@ def call_conditions_api(region_name: str, location_key: str):
 	response = requests.get(url, params=payload, headers=headers, timeout=0.5)
 	return response
 
-def request_weather_data(model_collection: dict):
+def request_weather_data(models: dict):
 	"""
 		Makes API requests to AccuWeather to collect the latest weather data (past 24 hours) for all models
 
 		Call to Locations API is required to call the Current Conditions API
 	"""
 
-	location_keys = get_location_keys(model_collection)
-	current_conditions = get_current_conditions(model_collection, location_keys)
+	# Mapping of regions to country codes to help with getting location keys
+	country_codes = {
+		"mongolia": "MN"
+	}
+
+	# Mapping of regions to cities to help with query in call_conditions_api()
+	cities = {
+		"mongolia": "ulaanbaatar"
+	}
+
+	location_keys = get_location_keys(models, country_codes, cities)
+	current_conditions = get_current_conditions(models, location_keys)
 
 	# Store current conditions to SQLite DB
-	logger.info(f"Finished running request_weather_data()")
+	logger.info(f"Finished getting current weather conditions data.")
