@@ -91,9 +91,9 @@ const ForecastForm = (props) => {
   };
 
   return (
-    <div className="relative h-[calc(100vh-72px-24px)] flex bg-white mx-1 my-[12px] border-2 border-slate-300 rounded-md">
+    <div className="relative md:h-[calc(100vh-72px-24px)] justify-center flex w-full md:min-w-[260px] md:max-w-[300px] bg-white md:mr-2 my-[12px] border-2 border-slate-300 rounded-md">
       <form
-        className="w-full min-w-[300px] max-w-[360px] flex flex-col justify-between px-4 py-4"
+        className="w-full flex flex-col gap-y-6 justify-between px-4 py-4"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col">

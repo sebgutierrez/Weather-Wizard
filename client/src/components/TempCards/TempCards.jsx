@@ -10,13 +10,13 @@ const TempCards = (props) => {
       let timeString = rawTimeString.length === 11 ? rawTimeString.slice(0,2) + " " + rawTimeString.slice(-2) : rawTimeString.slice(0,1) + " " + rawTimeString.slice(-2)
       return (
         <li
-          className="flex flex-col justify-center items-center relative min-w-[120px] px-6 py-8 rounded-md bg-[#2C74FF]"
+          className="flex flex-col justify-center items-center relative min-w-[90px] md:min-w-[120px] px-0 py-3 md:px-6 md:py-8 rounded-md bg-[#2C74FF]"
           key={key}
         >
-          <span className="text-white absolute top-2 left-2 text-left">
+          <span className="text-white relative md:absolute md:top-2 md:left-3 text-left">
             {timeString}
-          </span>{" "}
-          <span className="text-white font-bold text-2xl pt-2">
+          </span>
+          <span className="text-white font-bold text-xl md:text-2xl pt-2">
             {temp[1].toFixed(1)}&deg;C
           </span>
         </li>
@@ -28,13 +28,13 @@ const TempCards = (props) => {
       let timeString = rawTimeString.length === 11 ? rawTimeString.slice(0,2) + " " + rawTimeString.slice(-2) : rawTimeString.slice(0,1) + " " + rawTimeString.slice(-2)
       return (
         <li
-          className="flex flex-col justify-center items-center relative min-w-[120px] px-6 py-8 rounded-md bg-[#2C74FF]"
+          className="flex flex-col justify-center items-center relative min-w-[90px] md:min-w-[120px] px-0 py-3 md:px-6 md:py-8 rounded-md bg-[#2C74FF]"
           key={key}
         >
-          <span className="text-white absolute top-2 left-2 text-left">
+          <span className="text-white relative md:absolute md:top-2 md:left-3 text-left">
             {timeString}
           </span>
-          <span className="text-white font-bold text-2xl pt-2">
+          <span className="text-white font-bold text-xl md:text-2xl pt-2">
             {temp[1].toFixed(1)}&deg;F
           </span>
         </li>

@@ -42,9 +42,9 @@ function Forecast() {
   return (
     <div className='flex flex-col relative bg-white'> 
         <Header></Header>
-        <div className="flex relative px-2">
+        <div className="flex flex-col md:flex-row items-center md:items-start pb-2 md:pb-0 pt-2 md:pt-0 relative px-4 md:my-4">
           <ForecastForm modelInfo={modelInfo} setModelInfo={setModelInfo}></ForecastForm>
-          <div className="relative w-full flex flex-col max-h-[calc(100vh-72px)] px-2 overflow-y-auto">
+          <div className="relative w-full flex flex-col max-h-[calc(100vh-72px)] px-0 md:px-2 overflow-y-auto">
             <LibreMap modelInfo={modelInfo}></LibreMap>
             <div className="flex flex-col items-start py-3">
               <h2 className="text-slate-700 text-xl">Settings</h2>

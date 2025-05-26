@@ -10,12 +10,12 @@ const HistoricalSection = (props) => {
       <div className="flex w-full">
         <div className="flex flex-col sm:flex-row sm:items-end justify-start sm:justify-between sm:align-bottom w-full">
           <div className="flex items-end">
-            <h2 className="text-slate-600 font-bold text-left text-lg lg:text-2xl">
+            <h2 className="text-slate-600 font-bold text-left text-md md:text-lg lg:text-2xl">
               24-Hour Forecast
             </h2>
             <span className="text-slate-500 pb-0.5 pl-2">5/25/2025</span>
           </div>
-          <span className="text-slate-500 text-left text-md">
+          <span className="text-slate-500 text-left text-md pb-0.5">
             {props.modelInfo.region}
           </span>
         </div>
