@@ -13,4 +13,3 @@ to make styling the elements easier.
 bootstrap should already be downloaded 
 to the node_modules directory but if you run into any errors,
 cd into client and type `npm install bootstrap`
-
