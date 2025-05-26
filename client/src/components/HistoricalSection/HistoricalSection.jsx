@@ -13,8 +13,7 @@ const HistoricalSection = (props) => {
             <h2 className="text-slate-600 font-bold text-left text-lg lg:text-2xl">
               24-Hour Forecast
             </h2>
-            <span className="text-slate-500 px-2">•</span>
-            <span className="text-slate-500">5/25/2025</span>
+            <span className="text-slate-500 pb-0.5 pl-2">5/25/2025</span>
           </div>
           <span className="text-slate-500 text-left text-md">
             {props.modelInfo.region}

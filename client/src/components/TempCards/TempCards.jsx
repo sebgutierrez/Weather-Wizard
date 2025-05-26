@@ -79,7 +79,7 @@ const TempCards = (props) => {
           <span className="text-white absolute top-2 left-2 text-left">
             {timeString}
           </span>{" "}
-          <span className="text-white font-bold text-2xl">
+          <span className="text-white font-bold text-2xl pt-2">
             {temp[1].toFixed(1)}&deg;C
           </span>
         </li>
@@ -97,7 +97,7 @@ const TempCards = (props) => {
           <span className="text-white absolute top-2 left-2 text-left">
             {timeString}
           </span>
-          <span className="text-white font-bold text-2xl">
+          <span className="text-white font-bold text-2xl pt-2">
             {temp[1].toFixed(1)}&deg;F
           </span>
         </li>

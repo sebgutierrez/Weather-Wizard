@@ -11,6 +11,11 @@ const ForecastForm = (props) => {
     shortModelName: "",
   });
 
+  const [regionGeo, setRegionGeo] = useState({
+    latitude: "",
+    longitude: ""
+  })
+
   const handleInputChange = (e) => {
     // Don't change state if the blank option is selected
     if (e.target.selectedIndex !== 0) {
@@ -19,10 +24,22 @@ const ForecastForm = (props) => {
         e.target.options[e.target.selectedIndex].getAttribute(
           "data-short-name",
         );
+      let optionLat = 
+        e.target.options[e.target.selectedIndex].getAttribute(
+          "data-lat",
+        );
+      let optionLong = 
+        e.target.options[e.target.selectedIndex].getAttribute(
+          "data-long",
+        );
       if (e.target.name == "region") {
         setRegionData({
           longRegionName: optionLongName,
           shortRegionName: optionShortName,
+        });
+        setRegionGeo({
+          latitude: optionLat,
+          longitude: optionLong,
         });
       }
       if (e.target.name == "model") {
@@ -55,12 +72,20 @@ const ForecastForm = (props) => {
         props.setModelInfo({
           region: formRegion.longRegionName,
           model: formModel.longModelName,
+          geo: {
+            lat: regionGeo.latitude,
+            long: regionGeo.longitude
+          },
           predictions: predictions,
         });
       });
     props.setModelInfo({
       region: formRegion.longRegionName,
       model: formModel.longModelName,
+      geo: {
+        lat: regionGeo.latitude,
+        long: regionGeo.longitude
+      },
       predictions: {},
     });
   };
@@ -84,7 +109,7 @@ const ForecastForm = (props) => {
             onChange={handleInputChange}
           >
             <option value="" data-short-name=""></option>
-            <option value="Houston, TX, USA" data-short-name="Houston">
+            <option value="Houston, TX, USA" data-short-name="Houston" data-lat="29.7" data-long="-95.4">
               Houston, TX, USA
             </option>
           </select>
@@ -104,22 +129,27 @@ const ForecastForm = (props) => {
             </option>
           </select>
         </div>
-        {formRegion.longRegionName === "" ||
-        formModel.longModelName === "" ? (
-          <button
-            type="submit"
-            className="bg-slate-100 border-slate-200 border-2 mb-0 rounded-md py-2 font-bold text-xl text-slate-400 cursor-not-allowed"
-          >
-            Forecast
-          </button>
-        ) : (
-          <button
-            type="submit"
-            className="bg-[#2C74FF] border-[#2C74FF] hover:bg-[#083999] hover:border-[#083999] border-2 mb-0 rounded-md py-2 font-bold text-xl text-white cursor-pointer"
-          >
-            Forecast
-          </button>
-        )}
+        {
+          formRegion.longRegionName === "" ||
+          formModel.longModelName === "" ? 
+          (
+            <button
+              type="submit"
+              className="bg-slate-100 border-slate-200 border-2 mb-0 rounded-md py-2 font-bold text-xl text-slate-400 cursor-not-allowed"
+            >
+              Forecast
+            </button>
+          ) 
+          : 
+          (
+            <button
+              type="submit"
+              className="bg-[#2C74FF] border-[#2C74FF] hover:bg-[#083999] hover:border-[#083999] border-2 mb-0 rounded-md py-2 font-bold text-xl text-white cursor-pointer"
+            >
+              Forecast
+            </button>
+          )
+        }
       </form>
     </div>
   );

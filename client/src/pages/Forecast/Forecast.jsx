@@ -7,7 +7,7 @@ import questionMark from "../../assets/question-mark.svg"
 
 import Header from '../../components/Header/Header';
 import ForecastForm from '../../components/ForecastForm/ForecastForm';
-import Map from '../../components/Map/Map';
+import LibreMap from '../../components/LibreMap/LibreMap';
 import SectionContainer from '../../components/SectionContainer/SectionContainer';
 
 function Forecast() {
@@ -15,9 +15,13 @@ function Forecast() {
   const [modelInfo, setModelInfo] = useState({
     region: "",
     model: "",
-    predictions: {}
+    geo: {
+      lat: 40,
+      long: -60
+    },
+    predictions: {} 
   });
-  const [helpBoxToggle, setHelpBoxToggle] = useState(false);
+
   const [isCelsius, setIsCelsius] = useState(false);
 
   function flipIsCelsius() {
@@ -41,7 +45,7 @@ function Forecast() {
         <div className="flex relative px-2">
           <ForecastForm modelInfo={modelInfo} setModelInfo={setModelInfo}></ForecastForm>
           <div className="relative w-full flex flex-col max-h-[calc(100vh-72px)] px-2 overflow-y-auto">
-            <Map></Map>
+            <LibreMap modelInfo={modelInfo}></LibreMap>
             <div className="flex flex-col items-start py-3">
               <h2 className="text-slate-700 text-xl">Settings</h2>
               <label htmlFor="degree" className="text-slate-700 text-md py-1">Temperature Unit</label>
