@@ -8,12 +8,8 @@ import cloud from "../../assets/cloud.svg"
 function Home(){
     return (
         <div className="cover-content">
-            {/* <div className="team-name-container">
-                <h1 className="team-name">Weather Wizards</h1>
-            </div> */}
             <div className="project-content">
                 <span className='weather-wizard'>Weather Wizard</span>
-                {/* <img src="../assets/cloud.svg" alt="cloud" /> */}
                 <img src={cloud}></img>
             </div>
             <div className="project-nav">

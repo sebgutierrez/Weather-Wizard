@@ -117,7 +117,7 @@ const TeamMembers3 = [
   return (
     <div className="">
         <Header></Header>
-        <div className="cards-container bg-white px-2 md:px-12 main-content-top-padding">
+        <div className="cards-container bg-white px-2 md:px-12">
             <div className="flex w-full justify-center pt-10">
                 <span className="font-bold text-lg sm:text-xl md:text-3xl text-slate-700">Meet the Weather Wizards</span>
             </div>
@@ -139,13 +139,6 @@ const TeamMembers3 = [
                     ))
             }
             </div>
-            {/* <div className="card-container mt-12 md:mt-16 mb-6">
-            {
-                TeamMembers3.map((member) => (
-                    <Card className="" data={member} key={member.id}></Card>
-                    ))
-            }
-            </div> */}
         </div>
     </div>
     
