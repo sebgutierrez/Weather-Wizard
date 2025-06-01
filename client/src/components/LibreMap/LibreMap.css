@@ -1,0 +1,74 @@
+/* .point:hover > div {
+	display: block;
+} */
+
+.maplibregl-ctrl-attrib.maplibregl-compact-show {
+	box-shadow: 0 0 2px 2px #0096ff;
+}
+
+.time-slots-container {
+	position: absolute;
+	bottom: 0.5rem;
+	width: 100%;
+}
+
+.time-slots {
+	display: grid;
+	grid-template-columns: repeat(8, minmax(0, 1fr));
+	margin: 0 0.5rem;
+	align-items: center;
+	background-color: white;
+	border-radius: 0.5rem;
+}
+
+.time-slots label {
+	cursor: pointer;
+	user-select: none;
+	background-color: white;
+	color: #4D4D4D;
+	font-size: 14px;
+	padding: 0.25rem 0;
+}
+
+.model-name {
+	top: 0.5rem;
+	left: 0.5rem;
+}
+
+.selected-temp {
+	top: 2.5rem;
+	left: 0.5rem;
+}
+
+@media (max-width: 420px) {
+	.time-slots-container {
+		bottom: 0.25rem;
+	}
+	.time-slots {
+		margin: 0 0.25rem;
+	}
+	.time-slots label {
+		font-size: 12px;
+	}
+	.model-name {
+		top: 0.25rem;
+		left: 0.25rem;
+	}
+
+	.selected-temp {
+		top: 2.25rem;
+		left: 0.25rem;
+	}
+}
+
+.time-slots input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	top: -10px;
+}
+
+.time-slots input:checked + label {
+	background-color: #2C74FF;
+	color: white;
+}

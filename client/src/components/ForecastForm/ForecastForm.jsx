@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
+import './ForecastForm.css';
 
 const ForecastForm = (props) => {
   const [formRegion, setRegionData] = useState({
@@ -53,32 +54,32 @@ const ForecastForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/predict", {
-      method: "POST",
-      body: JSON.stringify({
-        region: formRegion.shortRegionName,
-        model: formModel.shortModelName,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-    })
-      .then((data) => data.json())
-      .then((predictions) => {
-        // setPredictedData(data.get('predicted'));
-        // setExpectedData(data.get('expected'));
-        console.log(predictions);
-        props.setModelInfo({
-          region: formRegion.longRegionName,
-          model: formModel.longModelName,
-          geo: {
-            lat: regionGeo.latitude,
-            long: regionGeo.longitude
-          },
-          predictions: predictions,
-        });
-      });
+    // fetch("http://localhost:5000/predict", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     region: formRegion.shortRegionName,
+    //     model: formModel.shortModelName,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   mode: "cors",
+    // })
+    //   .then((data) => data.json())
+    //   .then((predictions) => {
+    //     // setPredictedData(data.get('predicted'));
+    //     // setExpectedData(data.get('expected'));
+    //     console.log(predictions);
+    //     props.setModelInfo({
+    //       region: formRegion.longRegionName,
+    //       model: formModel.longModelName,
+    //       geo: {
+    //         lat: regionGeo.latitude,
+    //         long: regionGeo.longitude
+    //       },
+    //       predictions: predictions,
+    //     });
+    //   });
     props.setModelInfo({
       region: formRegion.longRegionName,
       model: formModel.longModelName,
@@ -89,21 +90,24 @@ const ForecastForm = (props) => {
       predictions: {},
     });
   };
-
+// md:h-[calc(100vh-72px-24px)] my-[12px] rounded-md md:min-w-[260px] md:max-w-[300px]
   return (
-    <div className="relative md:h-[calc(100vh-72px-24px)] justify-center flex w-full md:min-w-[260px] md:max-w-[300px] bg-white md:mr-2 my-[12px] border-2 border-slate-300 rounded-md">
+    <div className="relative bg-white border-2 mb-6 md:mx-24 border-slate-300 rounded-md">
       <form
-        className="w-full flex flex-col gap-y-6 justify-between px-4 py-4"
+        className="flex flex-col w-full gap-y-6 justify-between px-4 py-4"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col">
-          <p className="text-slate-700 text-lg text-left pb-2">Model Selection</p>
+          <h2 className="text-slate-600 font-bold text-left text-md md:text-lg lg:text-xl">
+            Model Selection
+          </h2>
+          <div className="my-2 px-0 h-px bg-slate-900/10"></div>
           <label htmlFor="region">
             <p className="text-black text-left">Region</p>
           </label>
           <select
             type="text"
-            className="bg-white px-1 py-1 mb-4 w-full text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
+            className="bg-white px-1 py-1 mb-4 w-[260px] md:w-[400px] text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
             id="region"
             name="region"
             onChange={handleInputChange}
@@ -118,7 +122,7 @@ const ForecastForm = (props) => {
           </label>
           <select
             type="text"
-            className="bg-white px-1 py-1 w-full text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
+            className="bg-white px-1 py-1 w-[260px] md:w-[400px] text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
             id="model"
             name="model"
             onChange={handleInputChange}
@@ -135,7 +139,7 @@ const ForecastForm = (props) => {
           (
             <button
               type="submit"
-              className="bg-slate-100 border-slate-200 border-2 mb-0 rounded-md py-2 font-bold text-xl text-slate-400 cursor-not-allowed"
+              className="bg-slate-100 border-slate-200 border-2 mb-0 rounded-md py-2 font-bold text-lg text-slate-400 cursor-not-allowed"
             >
               Forecast
             </button>
@@ -144,7 +148,7 @@ const ForecastForm = (props) => {
           (
             <button
               type="submit"
-              className="bg-[#2C74FF] border-[#2C74FF] hover:bg-[#083999] hover:border-[#083999] border-2 mb-0 rounded-md py-2 font-bold text-xl text-white cursor-pointer"
+              className="bg-[#2c74ff] text-white rounded-md text-lg mb-0 py-2 font-bold cursor-pointer"
             >
               Forecast
             </button>
