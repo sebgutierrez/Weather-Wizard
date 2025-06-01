@@ -4,8 +4,8 @@ import "./Header.css";
 
 import menuSVG from "../../assets/hamburger.svg";
 import closeMenuSVG from "../../assets/closeMenu.svg";
-import LogoIdeas from "../LogoIdeas/LogoIdeas";
-import { Link, NavLink } from "react-router-dom"; // substitutes <a> tags
+import wizHatSVG from "../../assets/white-wiz-hat.svg";
+import { NavLink } from "react-router-dom"; // substitutes <a> tags
 
 const Header = (props) => {
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
@@ -17,7 +17,7 @@ const Header = (props) => {
   return (
     <div className="relative min-w-[320px]" style={{ zIndex: "1000" }}>
       <header className="header justify-start md:justify-end">
-        {/* <LogoIdeas></LogoIdeas> */}
+        <img src={wizHatSVG} className="object-contain w-[64px] h-[64px] ml-4"/>
         <div className="flex md:hidden">
           {toggleMobileMenu === true ? (
             <img
@@ -57,7 +57,7 @@ const Header = (props) => {
                 "menu-item " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
               }
             >
-              Home
+              About
             </NavLink>
             <NavLink
               to="/team"
@@ -65,7 +65,7 @@ const Header = (props) => {
                 "menu-item " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
               }
             >
-              Forecast
+              Team
             </NavLink>
           </ul>
         </nav>
