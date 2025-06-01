@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Chart from "react-apexcharts";
 import "./ForecastChart.css";
 
@@ -6,8 +6,8 @@ const ForecastChart = (props) => {
   const [options, setOptions] = useState({
     options: {
       chart: {
-        id: "line",
-        type: "line",
+        id: "area",
+        type: "area",
         toolbar: {
           show: false,
           tools: {
@@ -23,31 +23,36 @@ const ForecastChart = (props) => {
         zoom: false,
         animations: {
           enabled: false,
-          dynamicAnimation: {
-            enabled: true,
-            speed: 350,
-          },
         },
         events: {
           mounted: (chart) => {
             chart.windowResizeHandler();
           },
         },
+        redrawOnParentResize: true,
       },
       grid: {
-        strokeDashArray: 2,
+        show: true,
+        yaxis: {
+          lines: {
+            show: true,
+          },
+        },
+        padding: {
+          right: 20,
+          left: -20
+        },
+        strokeDashArray: 3
       },
-      legend: {
-        showForSingleSeries: true,
-        position: "top",
-        offsetX: 16,
-        offsetY: 16,
+      dataLabels: {
+        enabled: false,
       },
       xaxis: {
         type: "datetime",
         tickPlacement: "on",
-        min: new Date("2023/12/24").getTime() - 0 * 3.6e6,
-        max: new Date("2024/01/04").getTime() + 0 * 3.6e6,
+        stepSize: 3,
+        min: new Date("2025-05-24T00:00:00").getTime(),
+        max: new Date("2025-05-24T21:00:00").getTime(),
         labels: {
           offsetX: 0,
           offsetY: 0,
@@ -56,158 +61,86 @@ const ForecastChart = (props) => {
             year: "yyyy",
             month: "MMM dd",
             day: "MMM dd",
+            hour: 'hh TT',
           },
         },
         axisTicks: {
           offsetX: 0,
           offsetY: 0,
         },
+        tooltip: {
+          enabled: false
+        }
       },
       yaxis: {
-        showAlways: true,
         labels: {
-          formatter: (value) => {
-            if (props.isCelsius) {
+          show: true,
+          formatter: function (value, options) {
+            /* For some reason, the state prop celsius doesn't change inside the function, need to use reference instead */
+            if (isCelsiusRef.current) {
               return `${value}°C`;
             } else {
               return `${value}°F`;
             }
-          },
+          }, 
+          offsetX: -32
         },
+        stepSize: 4
       },
       tooltip: {
         enabled: true,
-        shared: true,
-        followCursor: false,
+        formatter: function (value, options) {
+          /* For some reason, the state prop celsius doesn't change inside the function, need to use reference instead */
+          if (isCelsiusRef.current) {
+            return `${value}°C`;
+          } else {
+            return `${value}°F`;
+          }
+        }, 
         x: {
-          format: "MMM dd",
-        },
-        fixed: {
-          enabled: false,
-          offsetX: 100,
-          offsetY: -100,
-        },
-        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-          const hoverXaxis = w.globals.seriesX[seriesIndex][dataPointIndex];
-          const hoverIndexes = w.globals.seriesX.map((seriesX) => {
-            return seriesX.findIndex((xData) => xData === hoverXaxis);
-          });
-          let hoverList = "";
-          hoverIndexes.forEach((hoverIndex, seriesEachIndex) => {
-            if (
-              hoverIndex >= 0 &&
-              w.globals.collapsedSeriesIndices.includes(seriesEachIndex) ===
-                false
-            ) {
-              hoverList += `
-								<div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex; z-index: 100;">
-									<span class="apexcharts-tooltip-marker" style="background-color: ${
-                    w.globals.markers.colors[seriesEachIndex]
-                  };"></span>
-									<div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
-										<div class="apexcharts-tooltip-y-group">
-											<span class="apexcharts-tooltip-text-y-label">${
-                        w.globals.seriesNames[seriesEachIndex]
-                      }: </span>
-											<span class="apexcharts-tooltip-text-y-value">${w.globals.yLabelFormatters[0](
-                        series[seriesEachIndex][hoverIndex],
-                      )}</span>
-										</div>
-									</div>
-								</div>`;
-            }
-          });
-          const parsed = new Date(hoverXaxis).toUTCString().split(" ").slice(1);
-          return `<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; z-index: 300;">${
-            parsed[1] + " " + parsed[0] + " " + parsed[2]
-          }</div>${hoverList}`;
-          // <div class="apexcharts-tooltip apexcharts-theme-light apexcharts-active" style="left: 126.367px; top: 75.539px;"></div>
+          format: "hh:mm TT",
         },
       },
-      annotations: {
-        xaxis: [
-          {
-            x: new Date("2023/12/30").getTime(),
-            strokeDashArray: 3,
-            borderColor: "#c2c2c2",
-            fillColor: "#c2c2c2",
-            opacity: 0.75,
-            label: {
-              borderColor: "#c2c2c2",
-              borderWidth: 1,
-              borderRadius: 2,
-              text: "Forecast",
-              textAnchor: "end",
-              position: "bottom",
-              orientation: "horizontal",
-              offsetX: 54,
-              offsetY: -5,
-              mouseEnter: undefined,
-              mouseLeave: undefined,
-              click: undefined,
-              style: {
-                background: "#fff",
-                color: "#777",
-                fontSize: "12px",
-                fontWeight: 400,
-                fontFamily: undefined,
-                cssClass: "apexcharts-xaxis-annotation-label",
-              },
-            },
-          },
-          {
-            x: new Date("2023/12/30").getTime(),
-            strokeDashArray: 3,
-            borderColor: "#c2c2c2",
-            fillColor: "#c2c2c2",
-            opacity: 0.75,
-            label: {
-              borderColor: "#c2c2c2",
-              borderWidth: 1,
-              borderRadius: 2,
-              text: "Historical",
-              textAnchor: "end",
-              position: "bottom",
-              orientation: "horizontal",
-              offsetX: -7,
-              offsetY: -5,
-              mouseEnter: undefined,
-              mouseLeave: undefined,
-              click: undefined,
-              style: {
-                background: "#fff",
-                color: "#777",
-                fontSize: "12px",
-                fontWeight: 400,
-                fontFamily: undefined,
-                cssClass: "apexcharts-xaxis-annotation-label",
-              },
-            },
-          },
-        ],
+      stroke: {
+        curve: "smooth",
+        width: 2
       },
-      markers: {
-        size: 0,
-        hover: {
-          size: undefined,
+      plotOptions: {
+        area: {
+          fillTo: "end",
+        },
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          shadeIntensity: 1,
+          inverseColors: false,
+          opacityFrom: 0.75,
+          opacityTo: 0.5,
+        },
+      },
+      legend: {
+        show: false,
+        showForSingleSeries: true,
+        position: "top",
+        horizontalAlign: "left",
+        offsetX: 4,
+        offsetY: 12,
+        onItemClick: {
+          toggleDataSeries: false,
         },
       },
     },
   });
+
+  let regionFTemps = Array.from(props.apiData[props.regionName].f)
+  let regionCTemps = Array.from(props.apiData[props.regionName].c)
+
   const [series, setSeries] = useState({
     series: [
       {
-        name: "AccuWeather",
-        data: props.openWeatherData.f.map((data, key) => {
-          return {
-            x: data[0],
-            y: data[1].toFixed(1),
-          };
-        }),
-      },
-      {
-        name: "Long Short-Term Memory",
-        data: props.modelData.f.slice(6).map((data, key) => {
+        name: "Model",
+        data: regionFTemps.map((data, key) => {
           return {
             x: data[0],
             y: data[1].toFixed(1),
@@ -216,43 +149,22 @@ const ForecastChart = (props) => {
       },
     ],
   });
-
-  const [prevCelsius, setPrevCelsius] = useState(props.isCelsius);
-  const [chartKey, setChartKey] = useState(0);
+  const [prevIsCelsius, setPrevIsCelsius] = useState(props.isCelsius);
+  const isCelsiusRef = useRef(props.isCelsius);
 
   function flipIsCelsius() {
+    setOptions({
+      options: {
+        ...options.options,
+      },
+    });
+    
     if (props.isCelsius) {
-      setOptions({
-        options: {
-          ...options.options,
-          yaxis: {
-            showAlways: true,
-            labels: {
-              formatter: (value) => {
-                if (props.isCelsius) {
-                  return `${value}°C`;
-                } else {
-                  return `${value}°F`;
-                }
-              },
-            },
-          },
-        },
-      });
       setSeries({
         series: [
           {
-            name: "AccuWeather",
-            data: props.openWeatherData.c.map((data, key) => {
-              return {
-                x: data[0],
-                y: data[1].toFixed(1),
-              };
-            }),
-          },
-          {
-            name: "Long Short-Term Memory",
-            data: props.modelData.c.slice(6).map((data, key) => {
+            name: "Model",
+            data: regionCTemps.map((data, key) => {
               return {
                 x: data[0],
                 y: data[1].toFixed(1),
@@ -262,37 +174,11 @@ const ForecastChart = (props) => {
         ],
       });
     } else {
-      setOptions({
-        options: {
-          ...options.options,
-          yaxis: {
-            showAlways: true,
-            labels: {
-              formatter: (value) => {
-                if (props.isCelsius) {
-                  return `${value}°C`;
-                } else {
-                  return `${value}°F`;
-                }
-              },
-            },
-          },
-        },
-      });
       setSeries({
         series: [
           {
-            name: "AccuWeather",
-            data: props.openWeatherData.f.map((data, key) => {
-              return {
-                x: data[0],
-                y: data[1].toFixed(1),
-              };
-            }),
-          },
-          {
-            name: "Long Short-Term Memory",
-            data: props.modelData.f.slice(6).map((data, key) => {
+            name: "Model",
+            data: regionFTemps.map((data, key) => {
               return {
                 x: data[0],
                 y: data[1].toFixed(1),
@@ -303,23 +189,19 @@ const ForecastChart = (props) => {
       });
     }
   }
-
-  if (props.isCelsius !== prevCelsius) {
-    setPrevCelsius(props.isCelsius);
-    setChartKey((key) => {
-      return key + 1;
-    });
+  if (props.isCelsius !== prevIsCelsius) {
+    setPrevIsCelsius(props.isCelsius);
+    isCelsiusRef.current = props.isCelsius;
     flipIsCelsius();
   }
 
   return (
-    <div className="min-w-[250px] sm:min-w-[400px] md:min-w-[600px] md:w-full border-2 px-2 rounded-md overflow-visible">
+    <div className="w-full md:min-w-[600px] border-slate-300 rounded-md">
       <Chart
-        className=""
-        key={chartKey}
+        className="overflow-x-hidden overflow-y-hidden relative px-1 md:px-2"
         options={options.options}
         series={series.series}
-        type="line"
+        type="area"
         width="100%"
         height="250px"
       />

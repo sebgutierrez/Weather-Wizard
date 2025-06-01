@@ -1,38 +1,11 @@
-/* #chart .apexcharts-tooltip:hover {
-	opacity: 1.0 !important;
-}
-
-#chart .apexcharts-tooltip.apexcharts-theme-light {
-	background: none !important;
-}
-
-#chart .apexcharts-tooltip.apexcharts-theme-light:hover {
-	background: none !important;
-} */
-
 .apexcharts-svg {
   overflow: visible;
 }
 
+#apexchartsarea {
+  margin-left: 10px;
+}
+
 .apexcharts-tooltip {
-  color: black;
-  transform: translate(-10px, -40px);
-  z-index: 500;
-}
-
-.apexcharts-tooltip:hover {
-  opacity: 0.5 !important;
-}
-
-/* .apex-charts-legend {
-
-}
-
-.apexcharts-align-center {
-
-} */
-
-.apexcharts-legend.apx-legend-position-bottom.apexcharts-align-center,
-.apexcharts-legend.apx-legend-position-top.apexcharts-align-center {
-  justify-content: flex-start !important;
+  color: black !important;
 }
