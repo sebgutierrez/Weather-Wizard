@@ -21,7 +21,7 @@ function meridianTimeStamp(hour){
   } else if(hour === 12){
     return "12PM"
   } else if(hour < 12){
-    return hour + "PM"
+    return hour + "AM"
   } else {
     let cast = hour % 12
     return cast + "PM"
@@ -58,31 +58,16 @@ function makeTimeline(){
 
 const TemperatureMarker = (props) => {
   return (
-    props.isCelsius ? (
-      <div className="bg-white absolute top-[calc(50%-40px-24px)] left-[calc(50%+24px)] px-2 py-2 rounded-md shadow-md">
-        <div className="inline-flex">
-          <span className="text-[#4D4D4D] font-semibold text-xl md:text-[20px]">
-            {props.temperature}
-          </span>
-          <span className="top-[8px] text-[#4D4D4D]">
-            &deg;
-          </span>
-        </div>
+    <div className="absolute top-[calc(50%-40px-24px)] left-[calc(50%+24px)] px-2 py-2 rounded-md shadow-md bg-[#2C74FF]">
+      <div className="inline-flex">
+        <span className="text-white font-semibold text-xl md:text-[20px]">
+          {props.temperature}
+        </span>
+        <span className="top-[8px] text-white">
+          &deg;
+        </span>
       </div>
-    )
-    :
-    (
-      <div className="bg-white absolute top-[calc(50%-40px-24px)] left-[calc(50%+24px)] px-2 py-2 rounded-md shadow-md">
-        <div className="inline-flex">
-          <span className="text-[#4D4D4D] font-semibold text-xl md:text-[20px]">
-            {props.temperature}
-          </span>
-          <span className="top-[8px] text-[#4D4D4D]">
-            &deg;
-          </span>
-        </div>
-      </div>
-    )
+    </div>
   )
 }
 
@@ -159,8 +144,6 @@ const LibreMap = (props) => {
 
   return (
     <div>
-      <h2 className="text-slate-700 text-xl text-left mt-4">Temperature Map</h2>
-      <div className="w-full mt-3 mb-6 px-0 h-px bg-slate-900/5"></div>
       <Map
         longitude={props.modelInfo.geo.long}
         latitude={props.modelInfo.geo.lat}

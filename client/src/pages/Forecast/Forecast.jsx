@@ -31,24 +31,24 @@ function Forecast() {
   let apiData = {
     "Houston, TX, USA": {
       c: new Map([
-        [new Date('2025-05-24T00:00:00').getTime(), -17.3], 
-        [new Date('2025-05-24T03:00:00').getTime(), -17.8], 
-        [new Date('2025-05-24T06:00:00').getTime(), -19.7], 
-        [new Date('2025-05-24T09:00:00').getTime(), -15.4], 
-        [new Date('2025-05-24T12:00:00').getTime(), -13.8], 
-        [new Date('2025-05-24T15:00:00').getTime(), -11.7], 
-        [new Date('2025-05-24T18:00:00').getTime(), -15.2], 
-        [new Date('2025-05-24T21:00:00').getTime(), -14.3]
+        [new Date().getTime() + 0 * 60 * 60 * 1000, -17.3], 
+        [new Date().getTime() + 3 * 60 * 60 * 1000, -17.8], 
+        [new Date().getTime() + 6 * 60 * 60 * 1000, -19.7], 
+        [new Date().getTime() + 9 * 60 * 60 * 1000, -15.4], 
+        [new Date().getTime() + 12 * 60 * 60 * 1000, -13.8], 
+        [new Date().getTime() + 15 * 60 * 60 * 1000, -11.7], 
+        [new Date().getTime() + 18 * 60 * 60 * 1000, -15.2], 
+        [new Date().getTime() + 21 * 60 * 60 * 1000, -14.3]
       ]),
       f: new Map([
-        [new Date('2025-05-24T00:00:00').getTime(), 0.9], 
-        [new Date('2025-05-24T03:00:00').getTime(), -0.1], 
-        [new Date('2025-05-24T06:00:00').getTime(), -3.5], 
-        [new Date('2025-05-24T09:00:00').getTime(), 4.3], 
-        [new Date('2025-05-24T12:00:00').getTime(), 7.2], 
-        [new Date('2025-05-24T15:00:00').getTime(), 10.9], 
-        [new Date('2025-05-24T18:00:00').getTime(), 4.7],  
-        [new Date('2025-05-24T21:00:00').getTime(), 6.2]
+        [new Date().getTime() + 0 * 60 * 60 * 1000, 0.9], 
+        [new Date().getTime() + 3 * 60 * 60 * 1000, -0.1], 
+        [new Date().getTime() + 6 * 60 * 60 * 1000, -3.5], 
+        [new Date().getTime() + 9 * 60 * 60 * 1000, 4.3], 
+        [new Date().getTime() + 12 * 60 * 60 * 1000, 7.2], 
+        [new Date().getTime() + 15 * 60 * 60 * 1000, 10.9], 
+        [new Date().getTime() + 18 * 60 * 60 * 1000, 4.7],  
+        [new Date().getTime() + 21 * 60 * 60 * 1000, 6.2]
       ])
     }
 	}
@@ -87,6 +87,8 @@ function Forecast() {
                       <option value="°C">Celsius °C</option>
                     </select>
                   </div>
+                  <h2 className="text-slate-700 mt-4 text-xl text-left">Forecast</h2>
+                  <div className="w-full mt-2 mb-6 px-0 h-px bg-slate-900/5"></div>
                   <LibreMap modelInfo={modelInfo} apiData={apiData} isCelsius={isCelsius}></LibreMap>
                   <SectionContainer apiData={apiData} modelData={modelData} modelInfo={modelInfo} setModelInfo={setModelInfo} isCelsius={isCelsius}></SectionContainer>
                 </div>

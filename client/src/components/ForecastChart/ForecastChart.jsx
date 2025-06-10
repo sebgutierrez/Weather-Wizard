@@ -51,8 +51,8 @@ const ForecastChart = (props) => {
         type: "datetime",
         tickPlacement: "on",
         stepSize: 3,
-        min: new Date("2025-05-24T00:00:00").getTime(),
-        max: new Date("2025-05-24T21:00:00").getTime(),
+        min: new Date().getTime(),
+        max: new Date().getTime() + 21 * 60 * 60 * 1000,
         labels: {
           offsetX: 0,
           offsetY: 0,
