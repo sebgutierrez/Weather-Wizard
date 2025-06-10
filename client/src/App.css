@@ -15,19 +15,6 @@
   cursor: pointer;
 }
 
-/* .map-form-container {
-  position: relative;
-  display: flex; 
-  width: 100vw;
-  height: 92vh;
-}
-
-.map-container {
-  display: flex;
-  width: 100%;
-  background-color: lightgrey;
-} */
-
 .cards-container {
   position: relative;
   display: flex;
@@ -45,15 +32,11 @@
   align-items: stretch;
   justify-content: center;
   padding: 1rem;
-  /* width: 100%; */
-  /* gap: 20px; */
   row-gap: 6rem;
   column-gap: 1.25rem;
-  /* background-color: lightgrey; */
 }
 
 @media (min-width: 1024px) {
-  
   .card-container {
     flex-wrap: nowrap;
     gap: 1.25rem;
