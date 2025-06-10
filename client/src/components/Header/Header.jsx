@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import "../../App.css";
 import "./Header.css";
 
-import menuSVG from "../../assets/hamburger.svg";
-import closeMenuSVG from "../../assets/closeMenu.svg";
-import wizHatSVG from "../../assets/white-wiz-hat.svg";
+import menuSVG from "../../assets/dark-hamburger.svg";
+import closeMenuSVG from "../../assets/dark-close-menu.svg";
+import blackWizHatSVG from "../../assets/black-wiz-hat.svg";
+import cloudSVG from "../../assets/cloud.svg";
 import { NavLink } from "react-router-dom"; // substitutes <a> tags
 
 const Header = (props) => {
@@ -16,29 +17,31 @@ const Header = (props) => {
 
   return (
     <div className="relative min-w-[320px]" style={{ zIndex: "1000" }}>
-      <header className="header justify-start md:justify-end">
-        <img src={wizHatSVG} className="object-contain w-[64px] h-[64px] ml-4"/>
+      <header className="header relative justify-start md:justify-end">
         <div className="flex md:hidden">
-          {toggleMobileMenu === true ? (
-            <img
-              src={closeMenuSVG}
-              className="flex flex-col md:hidden px-3 py-1"
-              onClick={changeMenuDisplay}
-            />
-          ) : (
-            <img
-              src={menuSVG}
-              className="flex flex-col md:hidden px-3 py-1"
-              onClick={changeMenuDisplay}
-            />
-          )}
+          {
+            toggleMobileMenu === true ? (
+              <img
+                src={closeMenuSVG}
+                className="flex flex-col md:hidden px-3 py-1"
+                onClick={changeMenuDisplay}
+              />
+            ) : (
+              <img
+                src={menuSVG}
+                className="flex flex-col md:hidden px-3 py-1"
+                onClick={changeMenuDisplay}
+              />
+            )
+          }
         </div>
+        <NavLink to="/"><img src={cloudSVG} className="object-contain w-[64px] h-[64px] ml-[8px] mt-[8px] md:ml-[24px] md:mt-[12px]"/></NavLink>
         <nav className="navbar hidden md:flex">
           <ul className="nav-list">
             <NavLink
               to="/"
               className={state =>
-                "menu-item " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
+                "menu-item " + (state.isActive ? "bg-[#2C74FF] font-bold text-white" : "hover:bg-[#2C74FF]")
               }
             >
               Home
@@ -46,7 +49,7 @@ const Header = (props) => {
             <NavLink
               to="/forecast"
               className={state =>
-                "menu-item " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
+                "menu-item " + (state.isActive ? "bg-[#2C74FF] font-bold text-white" : "hover:bg-[#2C74FF]")
               }
             >
               Forecast
@@ -54,60 +57,46 @@ const Header = (props) => {
             <NavLink
               to="/about"
               className={state => 
-                "menu-item " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
+                "menu-item " + (state.isActive ? "bg-[#2C74FF] font-bold text-white" : "hover:bg-[#2C74FF]")
               }
             >
               About
             </NavLink>
-            <NavLink
-              to="/team"
-              className={state => 
-                "menu-item " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
-              }
-            >
-              Team
-            </NavLink>
           </ul>
         </nav>
       </header>
-      {toggleMobileMenu === true ? (
-        <nav className="flex md:hidden w-full justify-begin">
-          <ul className="flex flex-col w-full px-2 py-2 bg-[#2C74FF] mobile-nav-shadow">
-            <NavLink
-              to="/"
-              className={state =>
-                "menu-item w-full pr-6 " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
-              }
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/forecast"
-              className={state =>
-                "menu-item w-full pr-6 " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
-              }
-            >
-              Forecast
-            </NavLink>
-            <NavLink
-              to="/about"
-              className={state => 
-                "menu-item w-full pr-6 " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
-              }
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/team"
-              className={state => 
-                "menu-item w-full pr-6 " + (state.isActive ? "bg-[#083999]" : "hover:bg-[#083999]")
-              }
-            >
-              Forecast
-            </NavLink>
-          </ul>
-        </nav>
-      ) : null}
+      {
+        toggleMobileMenu && (
+          <nav className="flex md:hidden w-full justify-begin bg-white">
+            <ul className="flex flex-col w-full px-2 py-2 mobile-nav-shadow">
+              <NavLink
+                to="/"
+                className={state =>
+                  "menu-item w-full pr-6 " + (state.isActive ? "bg-[#2C74FF] font-bold text-white" : "hover:bg-[#2C74FF]")
+                }
+              >
+                Home
+              </NavLink>
+              <NavLink
+                to="/forecast"
+                className={state =>
+                  "menu-item w-full pr-6 " + (state.isActive ? "bg-[#2C74FF] font-bold text-white" : "hover:bg-[#2C74FF]")
+                }
+              >
+                Forecast
+              </NavLink>
+              <NavLink
+                to="/about"
+                className={state => 
+                  "menu-item w-full pr-6 " + (state.isActive ? "bg-[#2C74FF] font-bold text-white" : "hover:bg-[#2C74FF]")
+                }
+              >
+                About
+              </NavLink>
+            </ul>
+          </nav>
+        )
+      }
     </div>
   );
 };
