@@ -1,16 +1,12 @@
-// import React  from "react";
-// import Header from "../../components/Header"
-
 import React from "react";
 
-import logo from "../../assets/icons8-linkedin.svg";
+import linkedInSVG from "../../assets/linkedin.svg";
 import APICard from "../Cards/APICard";
 import MLCard from "../Cards/MLCard";
 import ReactCard from "../Cards/ReactCard";
 import TeamLeadCard from "../Cards/TeamLeadCard";
 
 const Card = (props) => {
-  //max-w-md mx-auto md:max-w-2xl
   return (
     <div className="min-w-md bg-white w-[300px] md:w-[400px] shadow-lg rounded-xl flex flex-col justify-between">
       <div className="relative px-6">
@@ -20,8 +16,7 @@ const Card = (props) => {
               <img
                 src={props.data.image}
                 className="shadow-lg  max-w-[150px] max-h-[150px] rounded-full align-middle relative -m-16 lg:-ml-16"
-              />{" "}
-              {/*shadow-lg rounded-full align-middle relative -m-16 -ml-2 lg:-ml-16 max-w-[150px]*/}
+              />
             </div>
           </div>
         </div>
@@ -52,7 +47,7 @@ const Card = (props) => {
           target="_blank"
           className="font-normal text-slate-700 hover:text-slate-400 flex justify-center"
         >
-          <img src={logo} alt="" className="align-middle inline relative" />
+          <img src={linkedInSVG} alt="" className="align-middle inline relative" />
         </a>
       </div>
     </div>
