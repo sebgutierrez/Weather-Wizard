@@ -63,12 +63,17 @@ function Forecast() {
   }
 
   return (
-    <div className='relative min-h-[100vh] flex flex-col bg-white'> 
+    <div className='relative min-h-[100vh] overflow-x-hidden flex flex-col'> 
         <Header></Header>
-        <div className="absolute bg-[#2c74ff] w-full h-[50vh]"></div>
-        <div className="relative flex flex-col items-center min-h-[calc(100vh-80px)] pt-[calc(50vh-200px)] px-4">
-          <ForecastForm modelInfo={modelInfo} setModelInfo={setModelInfo}></ForecastForm>
-          <div className="relative w-full flex flex-col px-0 md:px-20 pb-6">
+        <div className="relative bg-white flex flex-col items-center min-h-[calc(100vh-80px+2px)] py-8 px-4">
+          <div className="rounded-md bg-[#2C74FF] forecast-form-gradient h-fit my-12 flex flex-col gap-y-8 md:gap-y-0 md:flex-row py-6 md:py-8 px-3 sm:px-6 md:px-8 mx-0 md:mx-12 lg:mx-24">
+            <div className="flex flex-col mx-4">
+              <h2 className="text-lg md:text-xl lg:text-2xl text-white font-bold pb-4 md:pb-6">Create a Temperature Forecast</h2>
+              <p className="text-md text-white text-left lg:px-8">Choose from select regions and models to forecast tomorrow's temperatures. Models will take the weather conditions of the past three days to make up-to-date forecasts.</p>
+            </div>
+            <ForecastForm modelInfo={modelInfo} setModelInfo={setModelInfo}></ForecastForm>
+          </div>
+          <div className="relative w-full flex flex-col px-0 md:px-20 mt-8">
             { 
               modelInfo.region !== '' && modelInfo.model !== '' &&
               (

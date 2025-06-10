@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import './ForecastForm.css';
 
 const ForecastForm = (props) => {
   const [formRegion, setRegionData] = useState({
@@ -92,9 +91,9 @@ const ForecastForm = (props) => {
   };
 // md:h-[calc(100vh-72px-24px)] my-[12px] rounded-md md:min-w-[260px] md:max-w-[300px]
   return (
-    <div className="relative bg-white border-2 mb-6 md:mx-24 border-slate-300 rounded-md">
+    <div className="relative w-full md:w-fit h-full bg-white border-2 md:ml-4 border-slate-300 rounded-md">
       <form
-        className="flex flex-col w-full gap-y-6 justify-between px-4 py-4"
+        className="flex flex-col w-full h-full gap-y-6 justify-between px-4 py-4"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col">
@@ -107,7 +106,7 @@ const ForecastForm = (props) => {
           </label>
           <select
             type="text"
-            className="bg-white px-1 py-1 mb-4 w-[260px] md:w-[400px] text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
+            className="bg-white px-1 py-1 mb-4 w-full md:w-[300px] text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
             id="region"
             name="region"
             onChange={handleInputChange}
@@ -122,7 +121,7 @@ const ForecastForm = (props) => {
           </label>
           <select
             type="text"
-            className="bg-white px-1 py-1 w-[260px] md:w-[400px] text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
+            className="bg-white px-1 py-1 w-full md:w-[300px] text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
             id="model"
             name="model"
             onChange={handleInputChange}

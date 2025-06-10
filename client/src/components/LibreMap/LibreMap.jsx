@@ -3,7 +3,7 @@ import { Map, Marker, AttributionControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './LibreMap.css';
 
-import Pin from "../../assets/Pin.svg";
+import pinSVG from "../../assets/pin.svg";
 
 function militaryTimeStamp(hour){
   if(hour < 10){
@@ -125,7 +125,7 @@ const LibreMarker = (props) => {
           <div>
             <TemperatureMarker isCelsius={props.isCelsius} temperature={props.temperature}/>
             <Marker longitude={-95.4} latitude={29.7} anchor="bottom">
-              <img className="object-contain w-[40px] h-[40px]" src={Pin} />
+              <img className="object-contain w-[40px] h-[40px]" src={pinSVG} />
             </Marker>
           </div>
         )
