@@ -3,7 +3,6 @@ import logging
 from flask_app import create_app
 from models import load_models
 from form import validate
-from schedule import start_scheduler
 
 # To be changed with SQLite DB is set up
 LAST_24HR_DATA = []
@@ -33,7 +32,4 @@ if __name__ == "__main__":
     flask_logger.setLevel(logging.ERROR)
 
     models = load_models()
-
-    # start_scheduler(models=models, hours=0, minutes=1)
-
     app.run()
