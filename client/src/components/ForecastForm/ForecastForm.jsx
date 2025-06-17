@@ -2,13 +2,7 @@ import React, { useState } from "react";
 
 const ForecastForm = (props) => {
   const [formRegion, setRegionData] = useState({
-    longRegionName: "",
-    shortRegionName: "",
-  });
-
-  const [formModel, setModelData] = useState({
-    longModelName: "",
-    shortModelName: "",
+    name: ""
   });
 
   const [regionGeo, setRegionGeo] = useState({
@@ -19,11 +13,9 @@ const ForecastForm = (props) => {
   const handleInputChange = (e) => {
     // Don't change state if the blank option is selected
     if (e.target.selectedIndex !== 0) {
-      let optionLongName = e.target.options[e.target.selectedIndex].value;
-      let optionShortName =
-        e.target.options[e.target.selectedIndex].getAttribute(
-          "data-short-name",
-        );
+      let optionRegionName = e.target.options[e.target.selectedIndex].getAttribute(
+        "data-region-name",
+      );
       let optionLat = 
         e.target.options[e.target.selectedIndex].getAttribute(
           "data-lat",
@@ -32,22 +24,13 @@ const ForecastForm = (props) => {
         e.target.options[e.target.selectedIndex].getAttribute(
           "data-long",
         );
-      if (e.target.name == "region") {
-        setRegionData({
-          longRegionName: optionLongName,
-          shortRegionName: optionShortName,
-        });
-        setRegionGeo({
-          latitude: optionLat,
-          longitude: optionLong,
-        });
-      }
-      if (e.target.name == "model") {
-        setModelData({
-          longModelName: optionLongName,
-          shortModelName: optionShortName,
-        });
-      }
+      setRegionData({
+        name: optionRegionName
+      });
+      setRegionGeo({
+        latitude: optionLat,
+        longitude: optionLong,
+      });
     }
   };
 
@@ -56,8 +39,7 @@ const ForecastForm = (props) => {
     // fetch("http://localhost:5000/predict", {
     //   method: "POST",
     //   body: JSON.stringify({
-    //     region: formRegion.shortRegionName,
-    //     model: formModel.shortModelName,
+    //     region: formRegion.name
     //   }),
     //   headers: {
     //     "Content-Type": "application/json",
@@ -70,8 +52,7 @@ const ForecastForm = (props) => {
     //     // setExpectedData(data.get('expected'));
     //     console.log(predictions);
     //     props.setModelInfo({
-    //       region: formRegion.longRegionName,
-    //       model: formModel.longModelName,
+    //       region: formRegion.name,
     //       geo: {
     //         lat: regionGeo.latitude,
     //         long: regionGeo.longitude
@@ -79,17 +60,13 @@ const ForecastForm = (props) => {
     //       predictions: predictions,
     //     });
     //   });
-    props.setModelInfo({
-      region: formRegion.longRegionName,
-      model: formModel.longModelName,
-      geo: {
-        lat: regionGeo.latitude,
-        long: regionGeo.longitude
-      },
+    props.setRegionInfo({
+      region: formRegion.name,
+      latitude: regionGeo.latitude,
+      longitude: regionGeo.longitude,
       predictions: {},
     });
   };
-// md:h-[calc(100vh-72px-24px)] my-[12px] rounded-md md:min-w-[260px] md:max-w-[300px]
   return (
     <div className="relative w-full md:w-fit h-full bg-white border-2 md:ml-4 border-slate-300 rounded-md">
       <form
@@ -98,7 +75,7 @@ const ForecastForm = (props) => {
       >
         <div className="flex flex-col">
           <h2 className="text-slate-600 font-bold text-left text-md md:text-lg lg:text-xl">
-            Model Selection
+            Region Selection
           </h2>
           <div className="my-2 px-0 h-px bg-slate-900/10"></div>
           <label htmlFor="region">
@@ -112,29 +89,13 @@ const ForecastForm = (props) => {
             onChange={handleInputChange}
           >
             <option value="" data-short-name=""></option>
-            <option value="Houston, TX, USA" data-short-name="Houston" data-lat="29.7" data-long="-95.4">
+            <option value="Houston, TX, USA" data-region-name="Houston, TX, USA" data-lat="29.7" data-long="-95.4">
               Houston, TX, USA
-            </option>
-          </select>
-          <label htmlFor="model">
-            <p className="text-black text-left">Model</p>
-          </label>
-          <select
-            type="text"
-            className="bg-white px-1 py-1 w-full md:w-[300px] text-slate-500 hover:bg-gray-50 border-2 border-slate-200"
-            id="model"
-            name="model"
-            onChange={handleInputChange}
-          >
-            <option value="" data-short-name=""></option>
-            <option value="Long Short-Term Memory" data-short-name="lstm">
-              Long Short-Term Memory
             </option>
           </select>
         </div>
         {
-          formRegion.longRegionName === "" ||
-          formModel.longModelName === "" ? 
+          formRegion.name === "" ? 
           (
             <button
               type="submit"
