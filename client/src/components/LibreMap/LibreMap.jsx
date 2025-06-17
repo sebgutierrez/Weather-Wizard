@@ -5,17 +5,8 @@ import './LibreMap.css';
 
 import pinSVG from "../../assets/pin.svg";
 
-function militaryTimeStamp(hour){
-  if(hour < 10){
-    return "0" + hour + ":00:00"
-  } else if (hour === 24) {
-    return "00:00:00"
-  } else {
-    return hour + ":00:00"
-  }
-}
-
-function meridianTimeStamp(hour){
+function meridianTimeStamp(timestamp){
+  let hour = Number(timestamp.slice(11, 13))
   if(hour === 0 || hour === 24){
     return "12AM"
   } else if(hour === 12){
@@ -28,137 +19,88 @@ function meridianTimeStamp(hour){
   }
 }
 
-function roundUp(hour){
-  // round up to next hour that is a multiple of 3
-  while(hour % 3 !== 0){
-    hour = hour + 1
-    if(hour === 24){
-      hour = 0
-      return hour
-    }
-  }
-  return hour
-}
+const TemperatureMarkers = (props) => {
+  let modelAndTemperaturesArray = Object.entries(props.modelTemperatures)
 
-function makeTimeline(){
-  let baseHour = new Date().getHours()
-
-  baseHour = roundUp(baseHour)
-
-  let points = []
-  points[0] = baseHour
-
-  // Full 24-hr cycle
-  for(let i = 1; i < 8; i ++){
-    points[i] = (baseHour + 3 * i) % 24
-  }
-
-  return points;
-}
-
-const TemperatureMarker = (props) => {
-  return (
-    <div className="absolute top-[calc(50%-40px-24px)] left-[calc(50%+24px)] px-2 py-2 rounded-md shadow-md bg-[#2C74FF]">
-      <div className="inline-flex">
-        <span className="text-white font-semibold text-xl md:text-[20px]">
-          {props.temperature}
-        </span>
-        <span className="top-[8px] text-white">
-          &deg;
-        </span>
+  const temperatureCards = modelAndTemperaturesArray.map((modelAndTemperature) => {
+    return (      
+      <div key={modelAndTemperature[0]} className="bg-[#2c74ff] shadow-md rounded-lg px-3 py-1.5">
+        <div className="flex flex-row">
+          <span className="text-white text-[14px] md:text-[16px] pr-[3px]">
+            {modelAndTemperature[0]}:
+          </span>
+          <span className="text-white text-[14px] md:text-[16px]">
+            {modelAndTemperature[1]}
+          </span>
+          <span className="text-[14px] md:text-[16px] text-white">
+            &deg;
+          </span>
+        </div>
       </div>
+    )
+  })
+
+  return (
+    <div className="absolute top-[calc(0%+4px)] left-[calc(0%+4px)] md:top-[calc(50%-84px)] md:left-[calc(50%+32px)] flex flex-col gap-y-1">
+      {temperatureCards}
     </div>
   )
 }
 
-const TimeLine = (props) => {
-  const timelinePoints = makeTimeline();
-
-  let militaryTimeStamps = timelinePoints.map((hour) => militaryTimeStamp(hour))
-  let meridianTimeStamps = timelinePoints.map((hour) => meridianTimeStamp(hour))
-
-  return (
-    <div className="time-slots-container">
-      <div className="time-slots shadow-md">
-        <input type="radio" name="timeline" id="first" defaultChecked/>
-        <label className="rounded-l-md" htmlFor="first" onClick={() => props.setTimeStamp(militaryTimeStamps[0])}>{meridianTimeStamps[0]}</label>
-        <input type="radio" name="timeline" id="second"/>
-        <label className="border-l-[2px]" htmlFor="second" onClick={() => props.setTimeStamp(militaryTimeStamps[1])}>{meridianTimeStamps[1]}</label>
-        <input type="radio" name="timeline" id="third"/>
-        <label className="border-l-[2px]" htmlFor="third" onClick={() => props.setTimeStamp(militaryTimeStamps[2])}>{meridianTimeStamps[2]}</label>
-        <input type="radio" name="timeline" id="fourth"/>
-        <label className="border-l-[2px]" htmlFor="fourth" onClick={() => props.setTimeStamp(militaryTimeStamps[3])}>{meridianTimeStamps[3]}</label>
-        <input type="radio" name="timeline" id="fifth"/>
-        <label className="border-l-[2px]" htmlFor="fifth" onClick={() => props.setTimeStamp(militaryTimeStamps[4])}>{meridianTimeStamps[4]}</label>
-        <input type="radio" name="timeline" id="sixth"/>
-        <label className="border-l-[2px]" htmlFor="sixth" onClick={() => props.setTimeStamp(militaryTimeStamps[5])}>{meridianTimeStamps[5]}</label>
-        <input type="radio" name="timeline" id="seventh"/>
-        <label className="border-l-[2px]" htmlFor="seventh" onClick={() => props.setTimeStamp(militaryTimeStamps[6])}>{meridianTimeStamps[6]}</label>
-        <input type="radio" name="timeline" id="eight"/>
-        <label className="rounded-r-md border-l-[2px]" htmlFor="eight" onClick={() => props.setTimeStamp(militaryTimeStamps[7])}>{meridianTimeStamps[7]}</label>
-      </div>
-    </div>
-  );
-}
-
-const LibreMarker = (props) => {
-  return (
-    <div>
-      {
-        props.regionName === "Houston, TX, USA" && 
-        (
-          <div>
-            <TemperatureMarker isCelsius={props.isCelsius} temperature={props.temperature}/>
-            <Marker longitude={-95.4} latitude={29.7} anchor="bottom">
-              <img className="object-contain w-[40px] h-[40px]" src={pinSVG} />
-            </Marker>
-          </div>
-        )
+function getTemperatures(dlModels, apiModels, selectedTimeStamp){
+  let modelTemperatures = {}
+  for(const [model, forecast] of Object.entries(dlModels)){
+    let temperature = 0
+    forecast.forEach((point) => {
+      if(point.timestamp === selectedTimeStamp){
+        temperature = point.temperature
       }
-    </div>
-  )
-}
-
-function findTemperature(isCelsius, apiData, regionName, selectedTimeStamp){
-  if(isCelsius){
-    for(const entry of apiData[regionName].c.entries()){
-      const timeStamp = new Date(entry[0]).toString().slice(16, 24)
-      if(timeStamp === selectedTimeStamp){
-        return apiData[regionName].c.get(entry[0])
-      }
-    }
-  } else {
-    for(const entry of apiData[regionName].f.entries()){
-      const timeStamp = new Date(entry[0]).toString().slice(16, 24)
-      if(timeStamp === selectedTimeStamp){
-        return apiData[regionName].f.get(entry[0])
-      }
-    }
+    })
+    modelTemperatures[model] = temperature
   }
+  for(const [model, forecast] of Object.entries(apiModels)){
+    let temperature = 0
+    forecast.forEach((point) => {
+      if(point.timestamp === selectedTimeStamp){
+        temperature = point.temperature
+      }
+    })
+    modelTemperatures[model] = temperature
+  }
+  return modelTemperatures
 }
 
 const LibreMap = (props) => {
-  const [timeStamp, setTimeStamp] = useState(militaryTimeStamp(roundUp(new Date().getHours())));
-
-  let temperature = findTemperature(props.isCelsius, props.apiData, props.modelInfo.region, timeStamp)
+  const [timeStamp, setTimeStamp] = useState(props.modelData.metadata.timestamps[0]);
+  
+  let modelTemperatures = getTemperatures(props.modelData[props.regionInfo.region], props.apiData[props.regionInfo.region], timeStamp)
+  let meridianTimeStamps = props.modelData.metadata.timestamps.map((timestamp) => meridianTimeStamp(timestamp))
 
   return (
-    <div>
-      <Map
-        longitude={props.modelInfo.geo.long}
-        latitude={props.modelInfo.geo.lat}
-        zoom="4"
-        style={{display: 'relative', borderWidth: '2px', borderColor: 'rgba(203, 213, 225, 1.0)', borderRadius: '0.375rem', margin: '0.75rem 0 1rem 0', overflowY: 'auto', minHeight: '50vh', maxHeight: '50vh'}}
-        mapStyle="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-        attributionControl={false}
-        
-      >
-        <AttributionControl compact={true} position="top-right"></AttributionControl>
-        <div className="model-name bg-white text-[#4d4d4d] shadow-md rounded-lg absolute text-[16px] px-6 py-1">{props.modelInfo.region}</div>
-        <TimeLine setTimeStamp={setTimeStamp} />
-        <LibreMarker regionName={props.modelInfo.region} isCelsius={props.isCelsius} temperature={temperature}/>
-      </Map>
-    </div>
+    <Map
+      longitude={props.regionInfo.longitude}
+      latitude={props.regionInfo.latitude}
+      zoom="4"
+      style={{display: 'relative', borderWidth: '2px', borderColor: 'rgba(203, 213, 225, 1.0)', borderRadius: '0.375rem', margin: '0.75rem 0 1rem 0', overflowY: 'hidden', height: '60vh'}}
+      mapStyle="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+      attributionControl={false}
+    >
+      <AttributionControl compact={true} position="top-right"></AttributionControl>
+      <div className="time-slots-container">
+        <div className="time-slots shadow-md">
+          <input type="radio" name="timeline" id="first" defaultChecked/>
+          <label className="rounded-l-md" htmlFor="first" onClick={() => setTimeStamp(props.modelData.metadata.timestamps[0])}>{meridianTimeStamps[0]}</label>
+          <input type="radio" name="timeline" id="second"/>
+          <label className="border-l-[2px]" htmlFor="second" onClick={() => setTimeStamp(props.modelData.metadata.timestamps[1])}>{meridianTimeStamps[1]}</label>
+          <input type="radio" name="timeline" id="third"/>
+          <label className="border-l-[2px] rounded-r-md" htmlFor="third" onClick={() => setTimeStamp(props.modelData.metadata.timestamps[2])}>{meridianTimeStamps[2]}</label>
+        </div>
+      </div>
+      <TemperatureMarkers isCelsius={props.isCelsius} modelTemperatures={modelTemperatures}/>
+      <Marker longitude={props.regionInfo.longitude} latitude={props.regionInfo.latitude} anchor="bottom">
+        <img className="object-contain w-[40px] h-[40px]" src={pinSVG} />
+      </Marker>
+    </Map>
   );
 };
 

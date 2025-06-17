@@ -14,7 +14,7 @@
 
 .time-slots {
 	display: grid;
-	grid-template-columns: repeat(8, minmax(0, 1fr));
+	grid-template-columns: repeat(3, minmax(0, 1fr));
 	margin: 0 0.5rem;
 	align-items: center;
 	background-color: white;
@@ -71,4 +71,10 @@
 .time-slots input:checked + label {
 	background-color: #2C74FF;
 	color: white;
+	font-weight: bold;
 }
+
+.maplibregl-canvas-container.maplibregl-interactive, .maplibregl-canvas-container.maplibregl-interactive:active, .maplibregl-canvas-container.maplibregl-touch-drag-pan {
+	cursor: default;
+}
+
