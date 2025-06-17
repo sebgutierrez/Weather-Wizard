@@ -146,10 +146,10 @@ const About = () => {
             <div className='flex flex-col md:flex-row md:grid-cols-2 mt-4 px-8 sm:px-24'>
               <div className='pr-0 md:pr-6'>
                 <span className='text-slate-700 font-bold text-2xl w-full'>Code[Coogs]</span>
-                <p className="text-slate-600 text-left hyphens-auto pt-8">
+                <p className="text-slate-500 text-left hyphens-auto pt-8">
                   Weather Wizard is a Code[Coogs] team project. Code[Coogs] is the second largest computer science organization at the University of Houston focused on team projects, competitive programming, social events, workshops, and more. Team projects are semester/year-long projects where members can be assigned to projects to work on and present at our end-of-year banquet.
                 </p>
-                <p className="text-slate-600 text-left hyphens-auto mt-8">
+                <p className="text-slate-500 text-left hyphens-auto mt-8">
                   Want to get involved? Learn more about us <a href='https://www.codecoogs.com/' target='_blank' className='text-sky-500 hover:text-sky-500/50 underline underline-offset-4'>here</a>.
                 </p>
               </div>
@@ -176,7 +176,7 @@ const About = () => {
                 <div className='p-1 sm:p-2 md:p-2.5 rounded-full bg-[#2C74FF] min-w-[56px] md:min-w-[68px]'>
                   <img src={gridEarthSVG} className='w-[48px] h-[48px]'></img>
                 </div>
-                <span className='text-slate-500 px-4 text-left'>Regions sampled as a 5 x 5 coordinate grid at a 0.1&deg; x 0.1&deg; horizontal resolution about a region's capital</span>
+                <span className='text-slate-500 px-4 text-left'>Regions sampled as a 5 x 5 coordinate grid at a 0.1&deg; x 0.1&deg; horizontal resolution centered at a region's capital</span>
               </div>
               <div className='flex align-center items-center'>
                 <div className='p-1 sm:p-2 md:p-2.5 rounded-full bg-[#2C74FF] min-w-[56px] md:min-w-[68px]'>
@@ -185,8 +185,8 @@ const About = () => {
                 <span className='text-slate-500 px-4 text-left'>Includes <i>surface temperature</i> (t2m), <i>dewpoint temperature</i> (d2m), <i>surface pressure</i> (sp), <i>total precipitation</i> (tp), and <i>wind speed</i> (obtained from u10 and v10)</span>
               </div>
             </div>
-            <p className="text-[#0284c7] text-left hyphens-auto bg-[#e0f2fe] px-4 py-2 rounded-md mt-12">
-              Attribution: Dataset was generated using Copernicus Climate Change Service (C3S) information (2019) under the ECMWF and downloaded through the <a href='https://doi.org/10.24381/cds.e2161bac' target='_blank' className='text-sky-500 hover:text-sky-500/50 underline underline-offset-4'>Climate Data Store (CDS)</a> using their CDS API. 
+            <p className="text-[#0284c7] text-left hyphens-auto bg-[#e0f2fe] px-4 py-2 rounded-md mt-16">
+              Dataset was generated using Copernicus Climate Change Service (C3S) information (2019) under the ECMWF and downloaded through the <a href='https://doi.org/10.24381/cds.e2161bac' target='_blank' className='text-sky-500 hover:text-sky-500/50 underline underline-offset-4'>Climate Data Store (CDS)</a> using their CDS API. 
             </p>
           </section>
 
