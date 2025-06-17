@@ -1,11 +1,16 @@
 .apexcharts-svg {
-  overflow: visible;
-}
-
-#apexchartsarea {
-  margin-left: 10px;
+  overflow: visible !important;
 }
 
 .apexcharts-tooltip {
   color: black !important;
+  overflow: visible;
+}
+
+.apexcharts-legend {
+  width: 100%;
+  justify-content: center !important;
+  padding: 0 !important;
+  left: -10px !important;
+  overflow: visible !important;
 }

@@ -2,14 +2,39 @@ import React, { useState, useRef } from "react";
 import Chart from "react-apexcharts";
 import "./ForecastChart.css";
 
+function convertToSeries(regionalModels, lineType){
+  let regionDLSeries = []
+  for (const [model, forecast] of Object.entries(regionalModels)){
+    let seriesTemps = []
+    forecast.forEach((point) => {
+      seriesTemps.push({
+        x: new Date(point.timestamp).getTime(),
+        y: Math.round(point.temperature),
+      })
+    })
+    let seriesObject = {
+      name: model,
+      type: lineType,
+      data: seriesTemps
+    }
+    regionDLSeries.push(seriesObject)
+  }
+  return regionDLSeries
+}
+
+function searchForMinVal(series){
+  let min = 0
+  return min
+}
+
 const ForecastChart = (props) => {
   const [options, setOptions] = useState({
     options: {
       chart: {
-        id: "area",
-        type: "area",
+        id: "line",
+        type: "line",
+        // stacked: true,
         toolbar: {
-          show: false,
           tools: {
             download: false,
             selection: false,
@@ -18,11 +43,7 @@ const ForecastChart = (props) => {
             zoomout: false,
             pan: false,
             reset: false,
-          },
-        },
-        zoom: false,
-        animations: {
-          enabled: false,
+          }
         },
         events: {
           mounted: (chart) => {
@@ -49,10 +70,10 @@ const ForecastChart = (props) => {
       },
       xaxis: {
         type: "datetime",
-        tickPlacement: "on",
-        stepSize: 3,
-        min: new Date().getTime(),
-        max: new Date().getTime() + 21 * 60 * 60 * 1000,
+        tickPlacement: "between",
+        stepSize: 1,
+        min: new Date("2025-06-16T00:00:00").getTime(),
+        max: new Date("2025-06-16T06:00:00").getTime(),
         labels: {
           offsetX: 0,
           offsetY: 0,
@@ -63,10 +84,6 @@ const ForecastChart = (props) => {
             day: "MMM dd",
             hour: 'hh TT',
           },
-        },
-        axisTicks: {
-          offsetX: 0,
-          offsetY: 0,
         },
         tooltip: {
           enabled: false
@@ -83,9 +100,9 @@ const ForecastChart = (props) => {
               return `${value}°F`;
             }
           }, 
-          offsetX: -32
+          offsetX: -30
         },
-        stepSize: 4
+        stepSize: 3
       },
       tooltip: {
         enabled: true,
@@ -103,107 +120,80 @@ const ForecastChart = (props) => {
       },
       stroke: {
         curve: "smooth",
-        width: 2
+        width: 4
       },
       plotOptions: {
-        area: {
-          fillTo: "end",
-        },
+        // area: {
+        //   fillTo: "end",
+        // },
       },
       fill: {
-        type: "gradient",
-        gradient: {
-          shadeIntensity: 1,
-          inverseColors: false,
-          opacityFrom: 0.75,
-          opacityTo: 0.5,
-        },
+        type: 'solid',
+        opacity: [0.8, 0.8, 0.8],
       },
+      // fill: {
+      //   type: 'line',
+      //   gradient: {
+      //     opacityFrom: 0.6,
+      //     opacityTo: 0.8,
+      //   }
+      // },
       legend: {
-        show: false,
+        show: true,
         showForSingleSeries: true,
-        position: "top",
-        horizontalAlign: "left",
-        offsetX: 4,
-        offsetY: 12,
+        position: "bottom",
+        horizontalAlign: "center",
+        offsetX: 0,
+        offsetY: 8,
         onItemClick: {
-          toggleDataSeries: false,
+          toggleDataSeries: true,
         },
       },
     },
   });
 
-  let regionFTemps = Array.from(props.apiData[props.regionName].f)
-  let regionCTemps = Array.from(props.apiData[props.regionName].c)
+  let dLModelSeries = convertToSeries(props.modelData[props.regionInfo.region], "line")
+  let apiModelSeries = convertToSeries(props.apiData[props.regionInfo.region], "line")
 
   const [series, setSeries] = useState({
     series: [
-      {
-        name: "Model",
-        data: regionFTemps.map((data, key) => {
-          return {
-            x: data[0],
-            y: data[1].toFixed(1),
-          };
-        }),
-      },
-    ],
+      ...dLModelSeries,
+      ...apiModelSeries
+    ]
   });
+
   const [prevIsCelsius, setPrevIsCelsius] = useState(props.isCelsius);
   const isCelsiusRef = useRef(props.isCelsius);
 
-  function flipIsCelsius() {
+  function updateChart() {
     setOptions({
       options: {
-        ...options.options,
-      },
+        ...options.options
+      }
     });
-    
-    if (props.isCelsius) {
-      setSeries({
-        series: [
-          {
-            name: "Model",
-            data: regionCTemps.map((data, key) => {
-              return {
-                x: data[0],
-                y: data[1].toFixed(1),
-              };
-            }),
-          },
-        ],
-      });
-    } else {
-      setSeries({
-        series: [
-          {
-            name: "Model",
-            data: regionFTemps.map((data, key) => {
-              return {
-                x: data[0],
-                y: data[1].toFixed(1),
-              };
-            }),
-          },
-        ],
-      });
-    }
+    setSeries({
+      series: [
+        ...dLModelSeries,
+        ...apiModelSeries
+      ]
+    })
   }
+
   if (props.isCelsius !== prevIsCelsius) {
     setPrevIsCelsius(props.isCelsius);
     isCelsiusRef.current = props.isCelsius;
-    flipIsCelsius();
+    updateChart();
   }
 
   return (
-    <div className="w-full md:min-w-[600px] border-slate-300 rounded-md">
+    <div className="w-full md:min-w-[600px]">
       <Chart
-        className="overflow-x-hidden overflow-y-hidden relative px-1 md:px-2"
+        className="relative px-0 md:pl-2 left-0" 
         options={options.options}
         series={series.series}
-        type="area"
+        type="line"
         width="100%"
-        height="250px"
+        height="400px"
       />
     </div>
   );
