@@ -1,13 +1,10 @@
 cdsapi 
 xarray 
 pandas 
-eccodes 
 cfgrib 
-ecmwflibs 
 netcdf4
 numpy 
-pandas 
-matplotlib 
 xarray 
 tensorflow 
 netcdf4
+scikit-learn
