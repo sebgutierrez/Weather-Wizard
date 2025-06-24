@@ -1,4 +1,4 @@
-# Scorched Earth / Weather Wizard
+# Weather Wizard
 A deep learning web app for predicting future temperatures based off of ERA5-Land data
 
 ## Cloning the repository
@@ -10,7 +10,7 @@ Create a directory for the project
 
 Copy the project URL by clicking the green button to clone it
 
-    $ git clone https://github.com/sebgutierrez/Scorched-Earth.git
+    $ git clone https://github.com/sebgutierrez/Weather-Wizard.git
 
 ## Running the website
 Move to the client directory
