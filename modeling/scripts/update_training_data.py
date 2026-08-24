@@ -33,10 +33,8 @@ def upload_file_to_s3(file_name, bucket, object_name=None):
 		return False
 	return True
 
-features_path = Path("data/features")
-features_path.mkdir(parents=True, exist_ok=True)
-forecast_path = Path("data/forecasts")
-forecast_path.mkdir(parents=True, exist_ok=True)
+historical_forecasts_path = Path("data/historical_forecasts")
+historical_forecasts_path.mkdir(parents=True, exist_ok=True)
 
 # Setup the Open-Meteo API client with cache and retry on error
 cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
@@ -45,7 +43,7 @@ openmeteo = openmeteo_requests.Client(session = retry_session)
 
 # Make sure all required weather variables are listed here
 # The order of variables in hourly or daily is important to assign them correctly below
-url = "https://api.open-meteo.com/v1/forecast"
+url = "https://historical-forecast-api.open-meteo.com/v1/forecast"
 
 LOCATIONS = ["houston"]
 LAT_COORDS = [52.52]
@@ -57,16 +55,11 @@ params = {
 	"hourly": ["temperature_2m", "surface_pressure", "wind_speed_10m", "dew_point_2m", "wind_direction_10m", "weather_code", "cloud_cover"],
 	"models": "ncep_hrrr_conus",
 	"timezone": "America/Chicago",
-	"past_days": 7,
-	"forecast_days": 3,
+	"start_date": "2018-01-01",
+	"end_date": "2026-01-01",
 	"temperature_unit": "fahrenheit",
 	"temporal_resolution": "hourly_3",
 }
-
-past_days = 7
-forecast_days = 3
-hourly_resolution = 3
-input_window = past_days * hourly_resolution
 
 responses = openmeteo.weather_api(url, params = params)
 
@@ -105,17 +98,8 @@ for i in range(len(LOCATIONS)):
 
 	hourly_dataframe = pd.DataFrame(data = hourly_data)
 
-	features_dataframe = hourly_dataframe[:input_window]
-	forecast_dataframe = hourly_dataframe[input_window:]
-
-	file_name = "data/features/" + LOCATIONS[i] + '_hourly_dataframe.pkl'
+	file_name = "data/historical_forecasts/" + LOCATIONS[i] + '_hourly_dataframe.pkl'
 	print(file_name)
-	features_dataframe.to_pickle(file_name)
+	hourly_dataframe.to_pickle(file_name)
 
-	upload_file_to_s3(file_name, 's3://weather-wizard-weather-data', 'features/' + LOCATIONS[i] + '_hourly_dataframe.pkl')
-
-	file_name = "data/forecasts/" + LOCATIONS[i] + '_hourly_dataframe.pkl'
-	print(file_name)
-	forecast_dataframe.to_pickle(file_name)
-
-	upload_file_to_s3(file_name, 's3://weather-wizard-weather-data', 'forecasts/' + LOCATIONS[i] + '_hourly_dataframe.pkl')
+	upload_file_to_s3(file_name, 's3://weather-wizard-weather-data', 'historical_forecasts/' + LOCATIONS[i] + '_hourly_dataframe.pkl')
