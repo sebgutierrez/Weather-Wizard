@@ -30,19 +30,19 @@ def get_forecast_data(region_name):
 
 def get_historical_data(region_name):
 
-    object_name = "history/" + region_name + "_hourly_dataframe.pkl"
+    object_name = "historical_forecasts/" + region_name + "_hourly_dataframe.pkl"
     file_path = Path('/data/' + object_name)
 
     df = download_object(object_name, file_path)
     return df
 
-def get_features_data(region_name):
+# def get_features_data(region_name):
 
-    object_name = "features/" + region_name + "_hourly_dataframe.pkl"
-    file_path = Path('/data/' + object_name)
+#     object_name = "features/" + region_name + "_hourly_dataframe.pkl"
+#     file_path = Path('/data/' + object_name)
 
-    df = download_object(object_name, file_path)
-    return df
+#     df = download_object(object_name, file_path)
+#     return df
 
 @app.get("/")
 async def root():
@@ -51,15 +51,15 @@ async def root():
 @app.get("/history/{region_name}")
 async def history(region_name):  
     data = get_historical_data(region_name)
-    return {"data": data}
+    return data.to_json(orient="records") # or split
 
 # Placeholder: if the ML service calls for features, use gRPC 
-@app.get("/features/{region_name}")
-async def features(region_name):  
-    data = get_features_data(region_name)
-    return {"data": data}
+# @app.get("/features/{region_name}")
+# async def features(region_name):  
+#     data = get_features_data(region_name)
+#     return data.to_json(orient="records")
 
 @app.get("/forecasts/{region_name}")
 async def forecast(region_name):  
     data = get_forecast_data(region_name)
-    return {"data": data}
+    return data.to_json(orient="records")
